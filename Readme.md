@@ -1,8 +1,6 @@
-Spreadsheet Cells Properties Actions
-====================================
+#Spreadsheet Cells Properties Actions
 
-1. About
---------
+##1. About
 
 This Macro helps performing actions (e.g., set, clear) on cells properties
 of FreeCAD spreadsheet.
