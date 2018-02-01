@@ -146,7 +146,7 @@ class ActiveDocumentSheets:
     sheetToRequestParamsMap = {}
     sheetLabelToSheetMap = {}
     # for each cell property data header associate a tuple in the format of:
-    #   Header name: (setting method name, validation function name)
+    #   Header name: (setting method name, validation method name)
     # it is assumed that the setting methods belong to a 'Spreadsheet::Sheet' object, 
     # and the validation method belong to a 'RequestParameters' object.
     headerToFunctionsMap = {HEADER_UNITS: ('setDisplayUnit', 'validateUnits'), 
