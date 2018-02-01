@@ -53,7 +53,7 @@ All rights reserved.
 
 ## 3. License
 
-This work is licensed under GNU Lesser General Public License (LGPL).
+This work is licensed under GNU Lesser General Public License (LGPL).  
 License details:  https://www.gnu.org/licenses/lgpl-3.0.html
 
 ## 4. Gist of this Macro
@@ -83,3 +83,17 @@ interactively one spreadsheet from the list of known spreadsheets of the active
 document, identify the appropriate RequestParameters and pass it to the respective 
 SheetPropertiesActions. However, RequestParameters and SheetPropertiesActions can 
 be set and consumed without using a GUI.
+
+## 5. Examples
+
+![MainDialogScreenShot.jpg](assets/MainDialogScreenShot.jpg)
+
+The above main dialog of the **SheetProperties** Macro refers to the following FreeCAD spreadsheet example:
+
+![Multiple empty rows blocks in the middle.jpg](assets/MultipleEmptyRowsBlocksInTheMiddle.jpg)
+
+In the above example, the spreadsheet includes several comment rows at the beginning, followed by an empty row and then the headers line, and finally the main data rows with multiple empty rows left intentionally here and there.
+
+The **SheetProperties** Macro automatically identified the row location of the headers, as well as the ranges of the source data for setting the properties of the relevant cells under the Value header column. These discovered ranges are displayed in the above main dialog.
+
+For more examples (both valid and invalid examples) see: test/TestAll-SheetProperties.FCStd
