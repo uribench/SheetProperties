@@ -1,6 +1,6 @@
-#Spreadsheet Cells Properties Actions
+# Spreadsheet Cells Properties Actions
 
-##1. About
+## 1. About
 
 This Macro helps performing actions (e.g., set, clear) on cells properties
 of FreeCAD spreadsheet.
@@ -43,8 +43,7 @@ or from the tree view. Both methods of selecting a target spreadsheet can be
 used interchangeably. The Macro syncs between the tree view selection and
 the ComboBox, bi-directionally.
 
-2. Disclaimer of warranties and limitation of liability
--------------------------------------------------------
+## 2. Disclaimer of warranties and limitation of liability
 
 Use at your own risk. The author assumes no liability for data loss.
 It is advised to backup your data frequently.
@@ -52,14 +51,12 @@ It is advised to backup your data frequently.
 Copyright (c) 2017 - 2018, Uri Benchetrit, <uribench@gmail.com>.
 All rights reserved.
 
-3. License
-----------
+## 3. License
 
 This work is licensed under GNU Lesser General Public License (LGPL).
 License details:  https://www.gnu.org/licenses/lgpl-3.0.html
 
-4. Gist of this Macro
----------------------
+## 4. Gist of this Macro
 
 The ActiveDocumentSheets class holds the context of this Macro. It maintains 
 information about the active document, such as a list of all the available 
@@ -87,8 +84,7 @@ document, identify the appropriate RequestParameters and pass it to the respecti
 SheetPropertiesActions. However, RequestParameters and SheetPropertiesActions can 
 be set and consumed without using a GUI.
 
-5. ToDo
--------
+## 5. ToDo
 
 1. Open: Revisit the GUI layout definitions in the MainFormUI class, some minor 
    adjustments are required.
