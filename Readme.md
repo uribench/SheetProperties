@@ -83,18 +83,3 @@ interactively one spreadsheet from the list of known spreadsheets of the active
 document, identify the appropriate RequestParameters and pass it to the respective 
 SheetPropertiesActions. However, RequestParameters and SheetPropertiesActions can 
 be set and consumed without using a GUI.
-
-## 5. ToDo
-
-1. Open: Revisit the GUI layout definitions in the MainFormUI class, some minor 
-   adjustments are required.
-2. Open: Distinguish between public and non-public attributes.
-3. Open: Add docstrings to all public methods.
-4. Open: Implement a true validation for Alias property setting data.
-5. Open: Consider supporting editing manually the sheets while the 
-   SheetPropertiesActionsForm is still visible (for instance, for fixing 
-   a problem with the sheet). At least the respective RequestParameters instance has 
-   to be updated. After such update, the onTargetRowsRangeModeChanged() has to be 
-   called. Extend the 'Refresh' button to do actual refresh of the status and not 
-   just clear.
-6. Open: Consider moving some configurations to an external file.
