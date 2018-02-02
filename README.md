@@ -84,16 +84,25 @@ document, identify the appropriate RequestParameters and pass it to the respecti
 SheetPropertiesActions. However, RequestParameters and SheetPropertiesActions can 
 be set and consumed without using a GUI.
 
-## 5. Examples
+## 5. Examples and Tests
+
+### 5.1 Main Dialog
 
 ![MainDialogScreenShot.jpg](assets/MainDialogScreenShot.jpg)
 
-The above main dialog of the **SheetProperties** Macro refers to the following FreeCAD spreadsheet example:
+The above main dialog of the **SheetProperties** Macro refers to the following 
+FreeCAD spreadsheet example:
 
 ![Multiple empty rows blocks in the middle.jpg](assets/MultipleEmptyRowsBlocksInTheMiddle.jpg)
 
-In the above example, the spreadsheet includes several comment rows at the beginning, followed by an empty row and then the headers line, and finally the main data rows with multiple empty rows left intentionally here and there.
+In the above example, the spreadsheet includes several comment rows at the beginning, 
+followed by an empty row and then the headers line, and finally the main data rows with 
+multiple empty rows left intentionally here and there.
 
-The **SheetProperties** Macro automatically identified the row location of the headers, as well as the ranges of the source data for setting the properties of the relevant cells under the Value header column. These discovered ranges are displayed in the above main dialog.
+The **SheetProperties** Macro automatically identified the row location of the headers, 
+as well as the ranges of the source data for setting the properties of the relevant cells 
+under the Value header column. These discovered ranges are displayed in the above main dialog.
 
-For more examples (both valid and invalid examples) see: test/TestAll-SheetProperties.FCStd
+### 5.2 Test Cases
+
+For test cases (both valid and invalid examples) see: test/TestAll-SheetProperties.FCStd
