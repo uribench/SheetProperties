@@ -4,7 +4,7 @@ Spreadsheet Cells Properties Actions                         |
 
 __title__   = "SheetPropertiesActions"
 __author__  = "Uri Benchetrit, <uribench@gmail.com>"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __date__    = "2018-02-02"
 
 __Comment__ = "FreeCAD Macro for manipulating properties of spreadsheet cells"
@@ -23,6 +23,7 @@ import sys
 import json
 
 def main():
+    """Entry point"""
 
     try:
         context = ActiveDocumentSheets()
