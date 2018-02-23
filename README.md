@@ -1,10 +1,11 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4775d9ccc540c6bf7750d8490b2ed8)](https://www.codacy.com/app/uribench/SheetProperties)
+[![BCH compliance](https://bettercodehub.com/edge/badge/uribench/SheetProperties?branch=master)](https://bettercodehub.com/)
 
 Spreadsheet Cells Properties Actions
 ====================================
 
-1. About
-   -----
+About
+-----
 This Macro helps performing actions (e.g., set, clear) on cells properties
 of FreeCAD spreadsheet.
 
@@ -46,21 +47,21 @@ or from the tree view. Both methods of selecting a target spreadsheet can be
 used interchangeably. The Macro syncs between the tree view selection and
 the ComboBox, bi-directionally.
 
-2. Disclaimer of warranties and limitation of liability
-   ----------------------------------------------------
+Disclaimer of warranties and limitation of liability
+----------------------------------------------------
 Use at your own risk. The author assumes no liability for data loss.
 It is advised to backup your data frequently.
 
 Copyright (c) 2017 - 2018, Uri Benchetrit, <uribench@gmail.com>.
 All rights reserved.
 
-3. License
-   -------
+License
+-------
 This work is licensed under GNU Lesser General Public License (LGPL).  
 License details:  https://www.gnu.org/licenses/lgpl-3.0.html
 
-4. Gist of this Macro
-   ------------------
+Gist of this Macro
+------------------
 The ActiveDocumentSheets class holds the context of this Macro. It maintains 
 information about the active document, such as a list of all the available 
 spreadsheets, useful document level constants (e.g., header names for common 
@@ -87,9 +88,10 @@ document, identify the appropriate RequestParameters and pass it to the respecti
 SheetPropertiesActions. However, RequestParameters and SheetPropertiesActions can 
 be set and consumed without using a GUI.
 
-5. Examples and Tests
-   ------------------
-### 5.1 Main Dialog
+Examples and Tests
+------------------
+
+### Main Dialog
 
 ![MainDialogScreenShot.jpg](assets/MainDialogScreenShot.jpg)
 
@@ -106,6 +108,6 @@ The **SheetProperties** Macro automatically identified the row location of the h
 as well as the ranges of the source data for setting the properties of the relevant cells 
 under the Value header column. These discovered ranges are displayed in the above main dialog.
 
-### 5.2 Test Cases
+### Test Cases
 
 For test cases (both valid and invalid examples) see: test/TestAll-SheetProperties.FCStd
