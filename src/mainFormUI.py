@@ -6,24 +6,21 @@ from PySide import QtGui, QtCore
 class MainFormUI(QtGui.QMainWindow):
     """
     UI definitions of the central widget for the main form
-
-    Attributes:
-        selectSheetComboBox         -- QtGui.QComboBox to be populated and connected to signal handlers by the consumer
-        rangeFromSpinBox            -- QtGui.QSpinBox to be connected to signal handlers by the consumer
-        rangeToSpinBox              -- QtGui.QSpinBox to be connected to signal handlers by the consumer
-        setPropertiesPushButton     -- QtGui.QPushButton to be connected to signal handlers by the consumer
-        clearPropertiesPushButton   -- QtGui.QPushButton to be connected to signal handlers by the consumer
-        statusTextContent           -- QtGui.QTextEdit to be populated by the consumer
-        statusRefreshPushButton     -- QtGui.QPushButton to be connected to signal handlers by the consumer
-        dismissPushButton           -- QtGui.QPushButton to be connected to signal handlers by the consumer
     """
-
     def __init__(self):
         super(MainFormUI, self).__init__()
         self.initUI()
 
     def initUI(self):
-        # define window
+        self.defineWindow()
+        self.defineTargetSheetBox()
+        self.defineTargetRowsRangeBox()
+        self.defineActionsBox()
+        self.defineStatusBox()
+        self.defineDialogDismiss()
+
+    def defineWindow(self):
+        """Defines the window of the main dialog"""
         self.setGeometry(250, 250, 400, 515)    # xLoc,yLoc,width,height
         self.setWindowTitle("Sheet Properties Actions")
         self.setWindowFlags(QtCore.Qt.MSWindowsFixedSizeDialogHint | QtCore.Qt.WindowStaysOnTopHint)
@@ -33,20 +30,35 @@ class MainFormUI(QtGui.QMainWindow):
         font.setFamily('Verdana')
         self.setFont(font)
 
-        # target spread sheet selection group
+    def defineTargetSheetBox(self):
+        """
+        Defines the target spread sheet selection group
+
+        Attributes:
+            selectSheetComboBox -- QtGui.QComboBox to be populated and connected
+        """
         targetSheetGroupBox = QtGui.QGroupBox('Target Spreadsheet:', self)
         targetSheetGroupBox.setGeometry(10, 10, 380, 50)    # xLoc,yLoc,width,height
-        # pop-up menu for selecting the target spreadsheet (will be populated by the consuming object)
+        # pop-up menu for selecting the target spreadsheet
+        # (will be populated by the consuming object)
         self.selectSheetComboBox = QtGui.QComboBox(self)
-        self.selectSheetComboBox.setMinimumSize(300,23)        # width,height
+        self.selectSheetComboBox.setMinimumSize(300, 23)        # width,height
         self.selectSheetComboBox.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         targetSheetGroupBoxLayout = QtGui.QVBoxLayout()
         targetSheetGroupBoxLayout.addWidget(self.selectSheetComboBox)
         targetSheetGroupBox.setLayout(targetSheetGroupBoxLayout)
 
-        # target rows range group
+    def defineTargetRowsRangeBox(self):
+        """
+        Defines the target rows range group
+
+        Attributes:
+            rangeFromSpinBox -- QtGui.QSpinBox to be connected
+            rangeToSpinBox   -- QtGui.QSpinBox to be connected
+        """
         targetRowsRangeGroupBox = QtGui.QGroupBox('Target Rows Range:', self)
         targetRowsRangeGroupBox.setGeometry(10, 70, 380, 130)    # xLoc,yLoc,width,height
+
         # mode (custom/auto) radio buttons
         self.AutoTargetRowsRangeRadioButton = QtGui.QRadioButton('Auto')
         self.CustomTargetRowsRangeRadioButton = QtGui.QRadioButton('Custom')
@@ -56,6 +68,7 @@ class MainFormUI(QtGui.QMainWindow):
         targetRowsRangeRadioButtonsLayout = QtGui.QHBoxLayout()
         targetRowsRangeRadioButtonsLayout.addWidget(self.AutoTargetRowsRangeRadioButton)
         targetRowsRangeRadioButtonsLayout.addWidget(self.CustomTargetRowsRangeRadioButton)
+
         # custom 'from' row
         rangeFromRowLabel = QtGui.QLabel("From:", self)
         self.rangeFromRowSpinBox = QtGui.QSpinBox()
@@ -63,71 +76,89 @@ class MainFormUI(QtGui.QMainWindow):
         rangeFromRowLayout.addStretch(1)    # align to the right
         rangeFromRowLayout.addWidget(rangeFromRowLabel)
         rangeFromRowLayout.addWidget(self.rangeFromRowSpinBox)
+
         # custom 'to' row
         rangeToRowLabel = QtGui.QLabel("To:", self)
         self.rangeToRowSpinBox = QtGui.QSpinBox()
         rangeToRowLayout = QtGui.QHBoxLayout()
         rangeToRowLayout.addWidget(rangeToRowLabel)
         rangeToRowLayout.addWidget(self.rangeToRowSpinBox)
+
         # custom 'from' row and 'to' row combined layout
         customTargetRowsRangeLayout = QtGui.QHBoxLayout()
         customTargetRowsRangeLayout.addLayout(rangeFromRowLayout)
         customTargetRowsRangeLayout.addLayout(rangeToRowLayout)
+
         # mode radio buttons and custom range layout
         modeAndCustomRangeLayout = QtGui.QHBoxLayout()
         modeAndCustomRangeLayout.addLayout(targetRowsRangeRadioButtonsLayout)
         modeAndCustomRangeLayout.addLayout(customTargetRowsRangeLayout)
+
         # auto discovered rows range display area
         self.AutoTargetRowsRangeTextContent = QtGui.QTextEdit()
         self.AutoTargetRowsRangeTextContent.setReadOnly(True)
-        self.AutoTargetRowsRangeTextContent.setTabStopWidth(20)      # Tab stop width in pixels (default: 80 pixels)
+        # Tab stop width in pixels (default: 80 pixels)
+        self.AutoTargetRowsRangeTextContent.setTabStopWidth(20)
+
         # combined layout
         targetRowsRangeLayout = QtGui.QVBoxLayout()
         targetRowsRangeLayout.addLayout(modeAndCustomRangeLayout)
         targetRowsRangeLayout.addWidget(self.AutoTargetRowsRangeTextContent)
         targetRowsRangeGroupBox.setLayout(targetRowsRangeLayout)
 
-        # actions selection group
+    def defineActionsBox(self):
+        """
+        Defines the actions selection group
+
+        Attributes:
+            setPropertiesPushButton   -- QtGui.QPushButton to be connected
+            clearPropertiesPushButton -- QtGui.QPushButton to be connected
+        """
         actionsGroupBox = QtGui.QGroupBox('Actions:', self)
         actionsGroupBox.setGeometry(10, 210, 380, 50)   # xLoc,yLoc,width,height
         self.setPropertiesPushButton = QtGui.QPushButton('&Set', self)
-        self.setPropertiesPushButton.setMinimumSize(81,23)        # width,height
-        self.setPropertiesPushButton.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.setPropertiesPushButton.setMinimumSize(81, 23)        # width,height
+        self.setPropertiesPushButton.setSizePolicy(QtGui.QSizePolicy.Fixed,
+                                                   QtGui.QSizePolicy.Fixed)
         self.clearPropertiesPushButton = QtGui.QPushButton('&Clear', self)
-        self.clearPropertiesPushButton.setMinimumSize(81,23)      # width,height
-        self.clearPropertiesPushButton.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.clearPropertiesPushButton.setMinimumSize(81, 23)      # width,height
+        self.clearPropertiesPushButton.setSizePolicy(QtGui.QSizePolicy.Fixed,
+                                                     QtGui.QSizePolicy.Fixed)
         actionsGroupBoxLayout = QtGui.QHBoxLayout()
         actionsGroupBoxLayout.addWidget(self.setPropertiesPushButton)
         actionsGroupBoxLayout.addWidget(self.clearPropertiesPushButton)
         actionsGroupBox.setLayout(actionsGroupBoxLayout)
 
-        # status group
+    def defineStatusBox(self):
+        """
+        Defines the status group
+
+        Attributes:
+            statusTextContent       -- QtGui.QTextEdit to be populated
+            statusRefreshPushButton -- QtGui.QPushButton to be connected
+        """
         statusGroupBox = QtGui.QGroupBox('Status:', self)
         statusGroupBox.setGeometry(10, 270, 380, 200)   # xLoc,yLoc,width,height
         self.statusTextContent = QtGui.QTextEdit()
         self.statusTextContent.setReadOnly(True)
-        self.statusTextContent.setTabStopWidth(40)      # Tab stop width in pixels (default: 80 pixels)
+        # Tab stop width in pixels (default: 80 pixels)
+        self.statusTextContent.setTabStopWidth(40)
         self.statusRefreshPushButton = QtGui.QPushButton('&Refresh', self)
-        self.statusRefreshPushButton.setMinimumSize(81,23)        # width,height
+        self.statusRefreshPushButton.setMinimumSize(81, 23)        # width,height
         self.statusRefreshPushButton.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         statusGroupBoxLayout = QtGui.QVBoxLayout()
         statusGroupBoxLayout.addWidget(self.statusTextContent)
         statusGroupBoxLayout.addWidget(self.statusRefreshPushButton)
         statusGroupBox.setLayout(statusGroupBoxLayout)
 
-        # 'dismissPushButton' button
+    def defineDialogDismiss(self):
+        """
+        Defines the dialog dismiss widget
+
+        Attributes:
+            dismissPushButton -- QtGui.QPushButton to be connected
+        """
         self.dismissPushButton = QtGui.QPushButton('&Dismiss', self)
-        self.dismissPushButton.setMinimumSize(81,23)        # width,height
+        self.dismissPushButton.setMinimumSize(81, 23)        # width,height
         self.dismissPushButton.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         self.dismissPushButton.move(160, 480)
-        #dismissPushButtonLayout = QtGui.QHBoxLayout()
-        #dismissPushButtonLayout.addWidget(self.dismissPushButton)
-
-        # arrange the layout of the main form UI with all its elements
-        #mainFormUILayout = QtGui.QHBoxLayout(self)
-        #mainFormUILayout.addWidget(targetSheetGroupBox)
-        #mainFormUILayout.addWidget(targetRowsRangeGroupBox)
-        #mainFormUILayout.addWidget(actionsGroupBox)
-        #mainFormUILayout.addWidget(statusGroupBox)
-        #mainFormUILayout.addLayout(dismissPushButtonLayout)
-        #self.setLayout(mainFormUILayout)

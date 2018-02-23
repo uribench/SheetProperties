@@ -6,6 +6,7 @@ import FreeCADGui
 import Spreadsheet
 from utils import Utils
 from requestParameters import RequestParameters
+from preconditionError import PreconditionError
 
 class ActiveDocumentSheets:
     """
@@ -15,9 +16,9 @@ class ActiveDocumentSheets:
         HEADER_UNITS                -- constant string defining the expected string for this header
         HEADER_ALIAS                -- constant string defining the expected string for this header
         HEADER_VALUE                -- constant string defining the expected string for this header
-        sheetToRequestParamsMap     -- dictionary mapping between spreadsheet reference to request params reference
-        sheetLabelToSheetMap        -- dictionary mapping between spreadsheet label to spreadsheet reference
-        headerToFunctionsMap        -- dictionary mapping between headers to their respective setting and validation functions
+        sheetToRequestParamsMap     -- maps spreadsheet reference to request params reference
+        sheetLabelToSheetMap        -- maps spreadsheet label to spreadsheet reference
+        headerToFunctionsMap        -- maps headers to respective setting and validation functions
         getSheets()                 -- returns all the spreadsheet included in the active document
         getSelectedSheet()          -- returns the spreadsheet found in the active document
     """
@@ -32,10 +33,10 @@ class ActiveDocumentSheets:
     sheetLabelToSheetMap = {}
     # for each cell property data header associate a tuple in the format of:
     #   Header name: (setting method name, validation method name)
-    # it is assumed that the setting methods belong to a 'Spreadsheet::Sheet' object, 
+    # it is assumed that the setting methods belong to a 'Spreadsheet::Sheet' object,
     # and the validation method belong to a 'RequestParameters' object.
-    headerToFunctionsMap = {HEADER_UNITS: ('setDisplayUnit', 'validateUnits'), 
-                            HEADER_ALIAS: ('setAlias', 'validateAlias')} 
+    headerToFunctionsMap = {HEADER_UNITS: ('setDisplayUnit', 'validateUnits'),
+                            HEADER_ALIAS: ('setAlias', 'validateAlias')}
 
     def __init__(self):
         # Check preconditions
@@ -45,7 +46,7 @@ class ActiveDocumentSheets:
         self.activeDocument = App.ActiveDocument
 
         sheets = self.getSheets()
-        if (Utils.isEmpty(sheets)):
+        if Utils.isEmpty(sheets):
             raise PreconditionError('No spreadsheets were found in the active document')
 
         # Initialize useful maps
@@ -58,7 +59,7 @@ class ActiveDocumentSheets:
     def getSheets(self):
         """Returns the spreadsheet found in the active document"""
 
-        return App.ActiveDocument.findObjects("Spreadsheet::Sheet")
+        return App.ActiveDocument.findObjects('Spreadsheet::Sheet')
 
     def getSelectedSheet(self):
         """Returns the first selected spreadsheet in the active document tree view"""
@@ -66,7 +67,8 @@ class ActiveDocumentSheets:
         result = None
 
         sel = FreeCADGui.Selection.getSelection()
-        # Note: getSelection() returns an empty list if the selected object does not belong to the active document
+        # Note: getSelection() returns an empty list if the selected object
+        #       does not belong to the active document
         if (not Utils.isEmpty(sel)) and sel[0].isDerivedFrom('Spreadsheet::Sheet'):
             result = sel[0]
 

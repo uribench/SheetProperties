@@ -13,8 +13,16 @@ class Utils:
 
     @staticmethod
     def colNumberToColName(colNumber):
-        """Converts a 1-based column number to Excel style column name (i.e., 1 to 'A' up to 702 to 'ZZ')"""
+        """
+        Converts a 1-based column number to Excel style column name
+        (i.e., 1 to 'A' up to 702 to 'ZZ')
+        """
         alphabetList = string.ascii_uppercase
         alphabetListLen = len(alphabetList)
         d, m = divmod(colNumber-1, alphabetListLen)
-        return alphabetList[d-1] + alphabetList[m] if (colNumber>alphabetListLen) else alphabetList[colNumber-1]
+        if colNumber > alphabetListLen:
+            result = alphabetList[d-1] + alphabetList[m]
+        else:
+            result = alphabetList[colNumber-1]
+
+        return result

@@ -1,39 +1,44 @@
 # activeDocumentSheets.py
 # LGPL license; Copyright (C) 2018 Uri Benchetrit
 
-import FreeCAD
 from itertools import product
 import re
+import FreeCAD
 from utils import Utils
 
 class RequestParameters:
     """
-    Holds the parameters for a request of an action request on the properties 
+    Holds the parameters for a request of an action request on the properties
     of selected cells in the associated spreadsheet.
 
     Each spreadsheet in the document is associated with an instance of RequestParameters.
 
-    Actual request parameters can be set by using a UI Form (like in this Macro with 
+    Actual request parameters can be set by using a UI Form (like in this Macro with
     SheetPropertiesActionsForm), or by using other means.
 
     Attributes:
-        targetSpreadsheet           -- target spreadsheet for actions (e.g., set, clear) on cells properties
+        targetSpreadsheet           -- target spreadsheet for actions on cells properties
+                                       (e.g., set, clear)
         context                     -- context of this script
         initData()                  -- data initializing method for this instance
-        hasValidHeaders             -- True if the headers of the target spreadsheet are valid, False otherwise
+        hasValidHeaders             -- True if the headers of the target spreadsheet
+                                       are valid, False otherwise
         invalidHeadersReason        -- reason for invalid headers
-        hasValidPropertiesData      -- True if the properties data of the target spreadsheet are valid, False otherwise
+        hasValidPropertiesData      -- True if the properties data of the target spreadsheet
+                                       are valid, False otherwise
         invalidPropertiesDataReason -- reason for invalid properties data
         headersRowNumber            -- row number of the headers
         mandatoryHeaders            -- list of mandatory headers
         headersToLocMap             -- dictionary of {header name : header location} pairs
-        headersToColumnMap          -- dictionary of {header name : header column} pairs containing only headers that were found
-        dataRowsRanges              -- list of continuous continuous ranges of rows having source data
+        headersToColumnMap          -- dictionary of {header name : header column} pairs
+                                       containing only headers that were found
+        dataRowsRanges              -- list of continuous continuous ranges
+                                       of rows having source data
     """
 
     MAX_SEARCH_COL = 100    # Max value = 27*26=702='ZZ'
     MAX_SEARCH_ROW = 100    # Max value = 128^2=16,384
-    END_DATA_HINT = 5       # Min number of consecutive empty lines 
+    END_DATA_HINT = 5       # Min number of consecutive empty lines
                             # indicating end row of properties source data
 
     def __init__(self, sheet, context):
@@ -49,9 +54,11 @@ class RequestParameters:
 
         self.headersRowNumber = None
         self.mandatoryHeaders = [self.context.HEADER_ALIAS, self.context.HEADER_VALUE]
-        self.headersToLocMap = {self.context.HEADER_UNITS:'', self.context.HEADER_ALIAS:'', self.context.HEADER_VALUE:''}
+        self.headersToLocMap = {self.context.HEADER_UNITS:'',
+                                self.context.HEADER_ALIAS:'',
+                                self.context.HEADER_VALUE:''}
         self.headersToColumnMap = {}
-        self.dataRowsRanges = []    # list of continuous continuous ranges of rows having source data
+        self.dataRowsRanges = []    # list of continuous ranges of rows having source data
 
         # search for the headers in the associated sheet
         self.findSheetHeaders()
@@ -62,54 +69,59 @@ class RequestParameters:
 
             if Utils.isEmpty(self.dataRowsRanges):
                 self.hasValidPropertiesData = False
-                self.invalidPropertiesDataReason = 'No usable data rows for property setting were provided in \'{0}\' sheet\n'.  \
-                                                    format(self.targetSpreadsheet.Label)
+                self.invalidPropertiesDataReason = \
+                    'No usable data rows for property setting were provided in \'{0}\' sheet\n'.  \
+                    format(self.targetSpreadsheet.Label)
             else:
                 self.hasValidPropertiesData = True
 
     def findSheetHeaders(self):
-        """"""
+        """Searches the headers, if found it records their row number"""
         result = False
 
         searchedHeadersCount = len(self.headersToLocMap)
         uniqueHeadersFound = 0
 
         for row, col in product(range(1, self.MAX_SEARCH_ROW), range(1, self.MAX_SEARCH_COL)):
-                cellLoc = Utils.colNumberToColName(col) + str(row)
-                cellContent = self.targetSpreadsheet.getContents(cellLoc)
-                # check if the current cell content matches any of the possible headers
-                for header in self.headersToLocMap.keys():
-                    if cellContent.lower() == header.lower():
-                        # make sure the header that was found is not a duplicate
-                        if self.headersToLocMap[header] == '':
-                            self.headersToLocMap[header] = cellLoc                          
-                            # set headers row number only when the first header is found
-                            if uniqueHeadersFound == 0:
-                                self.headersRowNumber = row
-                            uniqueHeadersFound += 1
-                            result = True
-                        else:
-                            self.hasValidHeaders = False
-                            self.invalidHeadersReason = 'Found a duplicated header: ' + header
-                            return False
+            cellLoc = Utils.colNumberToColName(col) + str(row)
+            cellContent = self.targetSpreadsheet.getContents(cellLoc)
+            # check if the current cell content matches any of the possible headers
+            for header in self.headersToLocMap.keys():
+                if cellContent.lower() == header.lower():
+                    # make sure the header that was found is not a duplicate
+                    if self.headersToLocMap[header] == '':
+                        self.headersToLocMap[header] = cellLoc
+                        # set headers row number only when the first header is found
+                        if uniqueHeadersFound == 0:
+                            self.headersRowNumber = row
+                        uniqueHeadersFound += 1
+                        result = True
+                    else:
+                        self.hasValidHeaders = False
+                        self.invalidHeadersReason = 'Found a duplicated header: ' + header
+                        return False
 
-                # stop searching if all the possible headers were found
-                if uniqueHeadersFound == searchedHeadersCount:
-                    break
+            # stop searching if all the possible headers were found
+            if uniqueHeadersFound == searchedHeadersCount:
+                break
 
-        # validate search results with rules additional to those applied during the search for the headers in the spreadsheet 
+        # validate search results with rules additional to those applied during
+        # the search for the headers in the spreadsheet
         if not self.validateHeaders():
             result = False
 
         return result
 
     def initHeadersToColumnMap(self):
-        """compose a dictionary of {header name : header column} pairs containing only headers that were found"""
-
+        """
+        Composes a dictionary of {header name : header column} pairs
+        containing only headers that were found
+        """
         for header in self.headersToLocMap:
             headerLoc = self.headersToLocMap[header]
             if headerLoc != '':
-                # extract the header column name from the header location string (e.g., 'AB' from 'AB27')
+                # extract the header column name from the header location string
+                # (e.g., 'AB' from 'AB27')
                 col = re.findall('^[A-Z]+', headerLoc)[0]
                 self.headersToColumnMap.update({header: col})
 
@@ -118,12 +130,15 @@ class RequestParameters:
         Returns a list of continuous usable data rows ranges
 
         Returns:
-            :return (list): List of dictionaries {'From': None, 'To': None} for each continuous data rows range, 
+            :return (list): List of dictionaries {'From': None, 'To': None}
+                            for each continuous data rows range,
                             or empty list [] if none has been found
         """
 
-        dataRowsRanges = []                         # list of continuous continuous ranges of rows having source data
-        rangeFrom = self.headersRowNumber + 1       # initial guess. empty rows after headers row are possible
+        dataRowsRanges = []                     # list of continuous ranges of
+                                                # rows having source data
+        rangeFrom = self.headersRowNumber + 1   # initial guess.
+                                                # empty rows after headers row are possible
         rangeTo = self.MAX_SEARCH_ROW
 
         done = False
@@ -144,7 +159,7 @@ class RequestParameters:
             # find the end of the next range of data rows
             firstNoneDataRow = self.findFirstNoneDataRow(rangeFrom, rangeTo)
             if firstNoneDataRow is None:
-                # EOF reached and all rows between nextRangeFrom and rangeTo are data rows 
+                # EOF reached and all rows between nextRangeFrom and rangeTo are data rows
                 # (i.e., no none data rows were found in the given range)
                 nextDataRowsRange['To'] = rangeTo
                 done = True     # don't break before finalizing this iteration
@@ -159,7 +174,7 @@ class RequestParameters:
 
     def countLeadingNoneDataRows(self, fromRow, toRow):
         """counts the leading continuous empty rows in the given range"""
-        
+
         noneDataRowCount = 0
 
         for row in range(fromRow, toRow):
@@ -171,18 +186,21 @@ class RequestParameters:
             noneDataRowCount += 1
 
             if noneDataRowCount == self.END_DATA_HINT:
-                # min consecutive empty rows reached (i.e., a hint for end of properties source data)
+                # min consecutive empty rows reached
+                # (i.e., a hint for end of properties source data)
                 return None
 
         return noneDataRowCount
 
     def findFirstNoneDataRow(self, fromRow, toRow):
-        """Returns the row number of the first row in the given range that has no data for property setting"""
-
+        """
+        Returns the row number of the first row in the given range
+        that has no data for property setting
+        """
         for row in range(fromRow, toRow):
             if not self.isValidDataRow(row):
                 return row
- 
+
         return None     # end of range reached with no empty data rows
 
     def isValidDataRow(self, row):
@@ -190,8 +208,10 @@ class RequestParameters:
         Validates a property data source row
 
         Notes:
-            - a row having at least one valid content as data source for property setting is considered a valid row.
-            - the column under the HEADER_VALUE header is ignored in the following process (i.e., it may or may not have values). 
+            - a row having at least one valid content as data source
+              for property setting is considered a valid row.
+            - the column under the HEADER_VALUE header is ignored
+              in the following process (i.e., it may or may not have values).
 
         Args:
             :param row (int): Number of the row to be validated in the target spreadsheet
@@ -203,7 +223,8 @@ class RequestParameters:
         result = False
 
         for header in self.headersToColumnMap:
-            # iterate only over the property data sources columns headers (i.e., skip the value header)
+            # iterate only over the property data sources columns headers
+            # (i.e., skip the value header)
             if header == self.context.HEADER_VALUE:
                 continue
 
@@ -215,12 +236,15 @@ class RequestParameters:
             # prepare the validation function associated with the given header
             validationFunc, settingFunc = self.getPropertiesValidationAndSettingFunctions(header)
 
-            # the property data cell has a value, if the value is valid consider the entire row as valid
+            # the property data cell has a value, if the value is valid
+            # consider the entire row as valid
             if validationFunc(cellContent):
                 result = True
-                break   # the row has relevant data. no need to iterate any further inside the inspected row.
-            else:   
-                # invalid value for a property data cell. keep trying other data columns of the inspected row
+                break   # the row has relevant data. no need to iterate any
+                        # further inside the inspected row.
+            else:
+                # invalid value for a property data cell. keep trying other
+                # data columns of the inspected row
                 pass
 
         return result
@@ -230,10 +254,12 @@ class RequestParameters:
         Returns header dependent Validation and Setting functions for properties
 
         Args:
-            :param header (header_type_constant): The header of the column to which the provided property data source cell content belongs.
-                                        The validation depends on the type of the header.
-            :type header_type_constant: The property data source column header type constant defined by ActiveDocumentSheets 
-                                         (e.g., HEADER_UNITS, HEADER_ALIAS)
+            :param header (header_type_constant): The header of the column
+                to which the provided property data source cell content belongs.
+                The validation depends on the type of the header.
+            :type header_type_constant: The property data source column header
+                type constant defined by ActiveDocumentSheets
+                (e.g., HEADER_UNITS, HEADER_ALIAS)
         Returns:
             :return (tuple): References to Validation and Setting functions.
         """
@@ -265,7 +291,8 @@ class RequestParameters:
                 reasonPrefix = 'Mandatory header is missing: '
             else:
                 reasonPrefix = 'Mandatory headers are missing: '
-            allFailedRulesReasons.append(reasonPrefix + oneFailedRuleSeparator.join(oneFailedRuleReasons))
+            allFailedRulesReasons.append(reasonPrefix +
+                                         oneFailedRuleSeparator.join(oneFailedRuleReasons))
 
         # Rule #2: headers row number has to be set
         if self.headersRowNumber is None:
@@ -297,8 +324,8 @@ class RequestParameters:
             return False
 
     def validateAlias(self, alias):
-        # REVISIT: implement a true validation. 
-        # temporarily we just count the number of words and accept only a single word as a valid alias.
+        # REVISIT: implement a true validation.
+        # temporarily we just count the number of words and
+        # accept only a single word as a valid alias.
         tokens = alias.split()
         return len(tokens) == 1
-
