@@ -35,27 +35,12 @@ class SheetPropertiesActionsForm(MainFormUI):
         self.initForm()
 
     def initForm(self):
+        """"""
+        # do this before self.connectSignalHandlingMethods()
+        # see details inside the method implementation
+        self.initTargetSheetSelector()
 
-        # populate the pop-up menu for selecting the target spreadsheet from
-        # all the spreadsheets included in the active document.
-        # note that if signal handling methods for this ComboBx were installed
-        # before this point, then if the signals are not blocked,
-        # adding items to a ComboBox also triggers the currentIndexChanged signals,
-        # and this may be undesired before completing initialization.
-        for sheet in self.context.getSheets():
-            self.selectSheetComboBox.addItem(sheet.Label)
-
-        # connect signal handling methods
-        self.selectSheetComboBox.currentIndexChanged.connect(self.onSelectSheetComboBoxCurrentIndexChanged)
-        self.selectSheetComboBox.activated[str].connect(self.onSelectSheetComboBoxActivated)
-        self.AutoTargetRowsRangeRadioButton.clicked.connect(self.onTargetRowsRangeModeChanged)
-        self.CustomTargetRowsRangeRadioButton.clicked.connect(self.onTargetRowsRangeModeChanged)
-        self.rangeFromRowSpinBox.valueChanged[str].connect(self.onRangeFromRowSpinBoxValueChanged)
-        self.rangeToRowSpinBox.valueChanged[str].connect(self.onRangeToRowSpinBoxValueChanged)
-        self.setPropertiesPushButton.clicked.connect(self.onSetProperties)
-        self.clearPropertiesPushButton.clicked.connect(self.onClearProperties)
-        self.statusRefreshPushButton.clicked.connect(self.onRefreshStatus)
-        self.dismissPushButton.clicked.connect(self.onDismiss)
+        self.connectSignalHandlingMethods()
 
         # Install a selection observer
         self.treeViewSelectionObserver = TreeViewSelectionObserver(self)
@@ -79,6 +64,33 @@ class SheetPropertiesActionsForm(MainFormUI):
 
         # make the window visible
         self.show()
+
+    def initTargetSheetSelector(self):
+        """
+        Populates the pop-up menu for selecting the target spreadsheet from
+        all the spreadsheets included in the active document.
+
+        Note that if signal handling methods for this ComboBx were installed
+        before this point, then if the signals are not blocked,
+        adding items to a ComboBox also triggers the currentIndexChanged signals,
+        and this may be undesired before completing initialization.
+        """
+        for sheet in self.context.getSheets():
+            self.selectSheetComboBox.addItem(sheet.Label)
+
+    def connectSignalHandlingMethods(self):
+        """Connects signal handling methods for widgets of the main dialog"""
+        self.selectSheetComboBox.currentIndexChanged.connect(self.onSelectSheetComboBoxCurrentIndexChanged)
+        self.selectSheetComboBox.activated[str].connect(self.onSelectSheetComboBoxActivated)
+        self.AutoTargetRowsRangeRadioButton.clicked.connect(self.onTargetRowsRangeModeChanged)
+        self.CustomTargetRowsRangeRadioButton.clicked.connect(self.onTargetRowsRangeModeChanged)
+        self.rangeFromRowSpinBox.valueChanged[str].connect(self.onRangeFromRowSpinBoxValueChanged)
+        self.rangeToRowSpinBox.valueChanged[str].connect(self.onRangeToRowSpinBoxValueChanged)
+        self.setPropertiesPushButton.clicked.connect(self.onSetProperties)
+        self.clearPropertiesPushButton.clicked.connect(self.onClearProperties)
+        self.statusRefreshPushButton.clicked.connect(self.onRefreshStatus)
+        self.dismissPushButton.clicked.connect(self.onDismiss)
+
 
     def syncComboBoxFromTreeViewSelection(self):
         """Sync the selection in the pop-up menu with the selection in the Tree View"""
