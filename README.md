@@ -1,6 +1,3 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4775d9ccc540c6bf7750d8490b2ed8)](https://www.codacy.com/app/uribench/SheetProperties)
-[![BCH compliance](https://bettercodehub.com/edge/badge/uribench/SheetProperties?branch=master)](https://bettercodehub.com/)
-
 # Spreadsheet Cells Properties Actions
 
 TOC:
