@@ -10,7 +10,7 @@ TOC:
 
 ## Objectives
 
-The [`Spreadsheet Workbench`][1] of FreeCAD allows including spreadsheets in your model. The support externalizing parametric values of your model. The values in the spreadsheet can be manipulated and control geometric properties of your model.
+The [`Spreadsheet Workbench`][1] of FreeCAD allows including spreadsheets in your model. They support externalizing parametric values of your model. The values in the spreadsheet can be manipulated and control geometric properties of your model.
 
 Value cells in the spreadsheet can be assigned with properties (e.g., `units`, `alias`). 
 
