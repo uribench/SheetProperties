@@ -10,9 +10,6 @@ TOC:
 - [Usage](#usage)
 - [Gist of this Macro](#gist-of-this-macro)
 - [Examples and Tests](#examples-and-tests)
-- [Disclaimer of warranties and limitation of liability](#disclaimer-of-warranties-and-limitation-of-liability)
-- [License](#license)
-
 
 ## Objectives
 
@@ -146,19 +143,6 @@ under the Value header column. These discovered ranges are displayed in the abov
 ### Test Cases
 
 For test cases (both valid and invalid examples) see: `test/TestAll-SheetProperties.FCStd`
-
-## Disclaimer of warranties and limitation of liability
-
-Use at your own risk. The author assumes no liability for data loss.
-It is advised to backup your data frequently.
-
-Copyright (c) 2017 - 2018, Uri Benchetrit, <uribench@gmail.com>.
-All rights reserved.
-
-## License
-
-This work is licensed under GNU Lesser General Public License (LGPL).  
-License details:  https://www.gnu.org/licenses/lgpl-3.0.html
 
 ---
 
