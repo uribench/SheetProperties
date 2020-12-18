@@ -3,9 +3,9 @@
 
 import re
 import json
-from mainFormUI import MainFormUI
-from sheetPropertiesActions import SheetPropertiesActions
-from treeViewSelectionObserver import TreeViewSelectionObserver
+from .mainFormUI import MainFormUI
+from .sheetPropertiesActions import SheetPropertiesActions
+from .treeViewSelectionObserver import TreeViewSelectionObserver
 import FreeCADGui
 from PySide import QtCore
 

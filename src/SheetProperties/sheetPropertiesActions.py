@@ -2,7 +2,7 @@
 # LGPL license; Copyright (C) 2018 Uri Benchetrit
 
 import FreeCAD as App
-from utils import Utils
+from .utils import Utils
 
 class SheetPropertiesActions:
     """

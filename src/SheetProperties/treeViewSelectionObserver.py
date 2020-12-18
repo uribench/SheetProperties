@@ -2,7 +2,7 @@
 # LGPL license; Copyright (C) 2018 Uri Benchetrit
 
 import FreeCADGui
-from utils import Utils
+from .utils import Utils
 
 class TreeViewSelectionObserver:
     """Installable Observer for selections in the Tree View"""

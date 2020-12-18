@@ -4,7 +4,7 @@
 from itertools import product
 import re
 import FreeCAD
-from utils import Utils
+from .utils import Utils
 
 class RequestParameters:
     """

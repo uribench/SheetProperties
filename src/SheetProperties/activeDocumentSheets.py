@@ -4,9 +4,9 @@
 import FreeCAD as App
 import FreeCADGui
 import Spreadsheet
-from utils import Utils
-from requestParameters import RequestParameters
-from preconditionError import PreconditionError
+from .utils import Utils
+from .requestParameters import RequestParameters
+from .preconditionError import PreconditionError
 
 class ActiveDocumentSheets:
     """

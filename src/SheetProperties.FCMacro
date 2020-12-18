@@ -7,19 +7,19 @@ Spreadsheet Cells Properties Actions                         |
 
 __title__ = "SheetPropertiesActions"
 __author__ = "Uri Benchetrit, <uribench@gmail.com>"
-__version__ = "1.0.3"
-__date__ = "2018-02-02"
+__version__ = "1.0.7"
+__date__ = "2020-12-19"
 
 __Comment__ = "FreeCAD Macro for manipulating properties of spreadsheet cells"
 
 __Wiki__ = "TBD"
 __Help__ = "See the README.md file"
 __Status__ = "stable"
-__Requires__ = "FreeCAD 0.17dev"
+__Requires__ = "FreeCAD 0.18"
 
-from activeDocumentSheets import ActiveDocumentSheets
-from sheetPropertiesActionsForm import SheetPropertiesActionsForm
-from preconditionError import PreconditionError
+from SheetProperties.activeDocumentSheets import ActiveDocumentSheets
+from SheetProperties.sheetPropertiesActionsForm import SheetPropertiesActionsForm
+from SheetProperties.preconditionError import PreconditionError
 
 def main():
     """Entry point"""
